@@ -7,6 +7,7 @@ const ProjectRulesModel = db.define(
   {
     name: { type: DataTypes.STRING },
     content: { type: DataTypes.TEXT },
+    type: { type: DataTypes.INTEGER },
   },
   {
     timestamps: true, // This is the default value, so you can omit it if you want

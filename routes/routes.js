@@ -1,15 +1,49 @@
 const express = require("express");
 const loginUser = require("../controllers/User.js");
 const uploadFile = require("../controllers/UploadedFiles.js");
+const authenticateToken = require("../middleware/middleware.js");
 const [authenticateUser, refreshToken] = require("../controllers/Auth.js");
-const [addProject] = require("../controllers/Project.js")
+const [
+  addProject,
+  getAllProjects,
+  getProjectDetails,
+  editProject,
+] = require("../controllers/Project.js");
+const [
+  addRule,
+  getRulesByProject,
+  getRuleDetails,
+  editRule,
+] = require("../controllers/ProjectRules.js");
+const [
+  uploadNewFile,
+  getFilesByProject,
+  getFilesDetails,
+  editFile,
+] = require("../controllers/ProjectFiles.js");
 const router = express.Router();
 
-router.get("/", loginUser); // Pass a reference to loginUser function
-router.post("/login", authenticateUser); // Pass a reference to authenticateUser function
-router.post("/token", refreshToken); // Pass a reference to authenticateUser function
-router.post("/upload", uploadFile); // Pass a reference to uploadFile function
-router.post("/project/add", addProject); // Pass a reference to uploadFile function
+//GET
+router.get("/", loginUser);
+router.get("/project/:id/details", authenticateToken, getProjectDetails);
+router.get("/projects", authenticateToken, getAllProjects);
+router.get("/rules/:project_id", authenticateToken, getRulesByProject);
+router.get("/files/:project_id", authenticateToken, getFilesByProject);
+router.get("/rule/:id/details", authenticateToken, getRuleDetails);
+router.get("/file/:id/details", authenticateToken, getFilesDetails);
+
+//POST
+router.post("/login", authenticateUser);
+router.post("/token", refreshToken);
+router.post("/upload", authenticateToken, uploadFile);
+router.post("/file/add", uploadNewFile);
+router.post("/project/add", authenticateToken, addProject);
+router.post("/rules/add", authenticateToken, addRule);
+
+//PUT
+router.put("/project/:id/edit", authenticateToken, editProject);
+router.put("/rule/:id/edit", authenticateToken, editRule);
+router.put("/file/:id/edit", authenticateToken, editFile);
 
 // You can add more routes here...
 

@@ -9,6 +9,7 @@ const ProjectsModel = db.define(
   "projects",
   {
     name: { type: DataTypes.STRING },
+    description: { type: DataTypes.TEXT },
   },
   {
     timestamps: true, // This is the default value, so you can omit it if you want

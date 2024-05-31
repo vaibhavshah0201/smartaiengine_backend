@@ -9,6 +9,7 @@ const ProjectFilesModel = db.define(
     name: { type: DataTypes.STRING },
     type: { type: DataTypes.STRING },
     path: { type: DataTypes.TEXT },
+    description: { type: DataTypes.TEXT },
   },
   {
     timestamps: true, // This is the default value, so you can omit it if you want

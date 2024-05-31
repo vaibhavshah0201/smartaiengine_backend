@@ -55,4 +55,24 @@ const uploadFile = async (req, res, next) => {
   }
 };
 
-module.exports = [uploadFile];
+const editFile = async (req, res) => {
+  try {
+    const result = await UploadedFilesModel.update(req.body, {
+      where: { id: req.params.id },
+    });
+    if (result) {
+      return res
+        .status(200)
+        .json({ code: 200, message: "Update successfully." });
+    } else {
+      return res.status(404).json({
+        code: 404,
+        message: "Something went wrong",
+      });
+    }
+  } catch (error) {
+    res.json({ message: error.message });
+  }
+};
+
+module.exports = [uploadFile, editFile];

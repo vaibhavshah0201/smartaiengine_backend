@@ -9,16 +9,16 @@ app.use(express.json());
 
 let refreshTokens = [];
 
-app.post("/token", (req, res) => {
-  const refreshToken = req.body.token;
-  if (refreshToken == null) return res.sendStatus(401);
-  if (!refreshTokens.includes(refreshToken)) return res.sendStatus(403);
-  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
-    if (err) return res.sendStatus(403);
-    const accessToken = generateAccessToken({ name: user.name });
-    res.json({ accessToken: accessToken });
-  });
-});
+// app.post("/token", (req, res) => {
+//   const refreshToken = req.body.token;
+//   if (refreshToken == null) return res.sendStatus(401);
+//   if (!refreshTokens.includes(refreshToken)) return res.sendStatus(403);
+//   jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
+//     if (err) return res.sendStatus(403);
+//     const accessToken = generateAccessToken({ name: user.name });
+//     res.json({ accessToken: accessToken });
+//   });
+// });
 
 app.delete("/logout", (req, res) => {
   refreshTokens = refreshTokens.filter((token) => token !== req.body.token);
@@ -26,6 +26,7 @@ app.delete("/logout", (req, res) => {
 });
 
 const refreshToken = (req, res) => {
+  console.log(req.body);
   const refreshToken = req.body.token;
   if (refreshToken == null) return res.sendStatus(401);
   if (!refreshTokens.includes(refreshToken)) return res.sendStatus(403);
@@ -41,7 +42,7 @@ const authenticateUser = async (req, res) => {
     const result = await UserModel.findOne({
       where: { username: req.body.username, password: req.body.password },
     });
-    console.log(result);
+    console.log(result.dataValues);
     if (result) {
       const user = { username: result.username };
       const accessToken = generateAccessToken(user);
@@ -49,6 +50,7 @@ const authenticateUser = async (req, res) => {
       refreshTokens.push(refreshToken);
       res.json({
         code: 200,
+        result: result.dataValues,
         accessToken: accessToken,
         refreshToken: refreshToken,
         message: "User logged in successfully",
@@ -65,7 +67,7 @@ const authenticateUser = async (req, res) => {
 };
 
 function generateAccessToken(user) {
-  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "15s" });
+  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "10m" });
 }
 
 module.exports = [authenticateUser, refreshToken];
