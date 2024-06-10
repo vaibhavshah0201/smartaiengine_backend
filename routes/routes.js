@@ -21,7 +21,11 @@ const [
   getFilesDetails,
   editFile,
 ] = require("../controllers/ProjectFiles.js");
+const [ask] = require("../controllers/ChatPrompt.js")
 const router = express.Router();
+
+//CHATBOT
+router.get('/ask', ask)
 
 //GET
 router.get("/", loginUser);
