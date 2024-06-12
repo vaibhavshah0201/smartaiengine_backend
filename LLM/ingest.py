@@ -159,6 +159,6 @@ def ingest_documents():
     print(f"Ingestion complete! You can now run privateGPT.py to query your documents")
     return "Ingestion complete", 200
 
-# if __name__ == "__main__":
-#     main()
-    
+if __name__ == "__main__":
+    ingest_documents()
+

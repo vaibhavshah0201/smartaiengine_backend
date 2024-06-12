@@ -15,20 +15,16 @@ source_directory = os.environ.get('SOURCE_DIRECTORY', 'source_documents')
 
 @app.route('/ingest', methods=['POST'])
 def ingest():
-    print("18 called")
     if 'file' not in request.files:
         return jsonify({"error": "No file provided"}), 400
-    print("21 called")
     file = request.files['file']
     if file.filename == '':
         return jsonify({"error": "No file selected"}), 400
-    print("25 called")
     if not os.path.exists(source_directory):
         os.makedirs(source_directory)
 
     file_path = os.path.join(source_directory, file.filename)
     file.save(file_path)
-    print("31 called")
     message, status_code = ingest_documents()
 
     return jsonify({"message": message}), status_code

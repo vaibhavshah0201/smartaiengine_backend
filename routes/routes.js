@@ -21,33 +21,34 @@ const [
   getFilesDetails,
   editFile,
 ] = require("../controllers/ProjectFiles.js");
-const [ask] = require("../controllers/ChatPrompt.js")
+const [ask, ingest] = require("../controllers/ChatPrompt.js");
 const router = express.Router();
 
 //CHATBOT
-router.get('/ask', ask)
+router.get("/ask", ask);
+router.post("/ingest", ingest);
 
 //GET
 router.get("/", loginUser);
-router.get("/project/:id/details", authenticateToken, getProjectDetails);
-router.get("/projects", authenticateToken, getAllProjects);
-router.get("/rules/:project_id", authenticateToken, getRulesByProject);
-router.get("/files/:project_id", authenticateToken, getFilesByProject);
-router.get("/rule/:id/details", authenticateToken, getRuleDetails);
-router.get("/file/:id/details", authenticateToken, getFilesDetails);
+router.get("/project/:id/details", getProjectDetails);
+router.get("/projects", getAllProjects);
+router.get("/rules/:project_id", getRulesByProject);
+router.get("/files/:project_id", getFilesByProject);
+router.get("/rule/:id/details", getRuleDetails);
+router.get("/file/:id/details", getFilesDetails);
 
 //POST
 router.post("/login", authenticateUser);
 router.post("/token", refreshToken);
-router.post("/upload", authenticateToken, uploadFile);
+router.post("/upload", uploadFile);
 router.post("/file/add", uploadNewFile);
-router.post("/project/add", authenticateToken, addProject);
-router.post("/rules/add", authenticateToken, addRule);
+router.post("/project/add", addProject);
+router.post("/rules/add", addRule);
 
 //PUT
-router.put("/project/:id/edit", authenticateToken, editProject);
-router.put("/rule/:id/edit", authenticateToken, editRule);
-router.put("/file/:id/edit", authenticateToken, editFile);
+router.put("/project/:id/edit", editProject);
+router.put("/rule/:id/edit", editRule);
+router.put("/file/:id/edit", editFile);
 
 // You can add more routes here...
 
